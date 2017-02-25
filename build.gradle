@@ -22,7 +22,7 @@ dependencies {
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
-    compile 'com.github.brendan1991:BST:-SNAPSHOT'
+  //  compile 'com.github.brendan1991:BST:-SNAPSHOT'
      compile 'com.thoughtworks.xstream:xstream:1.4.9'
 }
 

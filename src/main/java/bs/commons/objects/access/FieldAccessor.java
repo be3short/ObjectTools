@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
+import bs.commons.objects.identifiers.LabelReader;
+
 public class FieldAccessor
 {
 
@@ -116,13 +118,24 @@ public class FieldAccessor
 
 		for (String fieldName : fields.keySet()) // iterate through the field names
 		{
+
 			try
 			{
 				Field field = fields.get(fieldName); // get the current field
+				field.setAccessible(true);
 				if (field.getDeclaredAnnotation(annotation) != null)
 				{
+					System.out.println(field.getType());
+					String name = LabelReader.getLabel(annotation, field);
+					if (name == null)
+					{
+						System.out.println(name);
+						name = fieldName;
+					}
+
 					Object fieldValue = field.get(object); // get the value of the current field
-					fieldValues.put(fieldName, fieldValue); // store the value in the field value map
+					fieldValues.put(name, fieldValue); // store the value in the field value map
+
 				}
 			} catch (Exception noFieldAccess) // couldn't access the value of the field
 			{
@@ -132,6 +145,7 @@ public class FieldAccessor
 			}
 		}
 		return fieldValues; // return the field value map
+
 	}
 
 	/*

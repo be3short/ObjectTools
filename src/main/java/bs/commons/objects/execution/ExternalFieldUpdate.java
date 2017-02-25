@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 
 import bs.commons.objects.manipulation.XMLParser;
 
-public class ExternalFieldUpdate extends ExternalMethodExecutor
+public class ExternalFieldUpdate
 {
 
 	public Field field;

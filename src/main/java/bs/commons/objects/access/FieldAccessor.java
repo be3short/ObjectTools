@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
-import bs.commons.objects.identifiers.LabelReader;
+import bs.commons.objects.labeling.LabelReader;
 
 public class FieldAccessor
 {
@@ -162,6 +162,24 @@ public class FieldAccessor
 	 */
 	public static HashMap<String, Field> getAnnotationFields(Object object, boolean include_private, Class annotation)
 	{
+		return getAnnotationFields(object, include_private, annotation, false);
+	}
+
+	/*
+	 * Gets the field values of an object that match a specific annotation
+	 * 
+	 * @param object - Object to gather fields from
+	 * 
+	 * @param include_private - Flag to include private fields
+	 * 
+	 * @param - field_annotation - Desired field classes to search for - all
+	 * other classes filtered
+	 * 
+	 * @return Mapping of fields indexed by field name
+	 */
+	public static HashMap<String, Field> getAnnotationFields(Object object, boolean include_private, Class annotation,
+	boolean ignore_final)
+	{
 		HashMap<String, Field> fields = getObjectFields(object, include_private); // get the fields of the object
 		HashMap<String, Field> filteredFields = new HashMap<String, Field>(); // initialize field value map
 
@@ -170,10 +188,13 @@ public class FieldAccessor
 			try
 			{
 				Field field = fields.get(fieldName); // get the current field
-				if (field.getDeclaredAnnotation(annotation) != null)
+				//if ((field.getModifiers() == Modifier.FINAL) && (ignore_final))
 				{
+					if (field.getDeclaredAnnotation(annotation) != null)
+					{
 
-					filteredFields.put(fieldName, field); // store the value in the field value map
+						filteredFields.put(fieldName, field); // store the value in the field value map
+					}
 				}
 			} catch (Exception noFieldAccess) // couldn't access the value of the field
 			{

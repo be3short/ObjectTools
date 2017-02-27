@@ -1,4 +1,4 @@
-package bs.commons.objects.identifiers;
+package bs.commons.objects.labeling;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,4 +1,4 @@
-package bs.commons.objects.identifiers;
+package bs.commons.objects.labeling;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,7 +8,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(
 { ElementType.FIELD })
-public @interface ChoiceName
+public @interface Properties
 {
 
+	String label() default "";
 }

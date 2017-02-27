@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import bs.commons.objects.identifiers.ChoiceName;
+import bs.commons.objects.labeling.ChoiceName;
 
 public class ChoiceAccessor
 {

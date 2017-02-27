@@ -12,4 +12,11 @@ public @interface MethodId
 {
 
 	String id();
+
+	String label() default "";
+
+	String location() default "";
+
+	String[] locationTypes() default
+	{ "" };//String[1]);
 }

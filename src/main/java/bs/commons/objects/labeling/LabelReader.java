@@ -34,6 +34,47 @@ public class LabelReader
 
 	}
 
+	public static String getLocation(Annotation annotation)
+	{
+
+		return getAnnotationFieldValue(annotation, "location", String.class);
+	}
+
+	public static String getId(Annotation annotation)
+	{
+
+		return getAnnotationFieldValue(annotation, "id", String.class);
+	}
+
+	public static <T> T getAnnotationFieldValue(Annotation annotation, String field_name, Class<T> returnClass)
+	{
+		T value = null;
+		try
+		{
+			value = (T) annotation.getClass().getDeclaredField(field_name).get(annotation);
+
+		} catch (Exception e)
+		{
+
+		}
+		return value;
+	}
+
+	public static String getLabel(Annotation annotation)
+	{
+		String label = null;
+		try
+		{
+			label = (String) annotation.getClass().getDeclaredField("label").get(annotation);
+
+		} catch (Exception e)
+		{
+
+		}
+		return label;
+
+	}
+
 	public static String getSettingsLabel(Field field)
 	{
 		String label = field.getName();

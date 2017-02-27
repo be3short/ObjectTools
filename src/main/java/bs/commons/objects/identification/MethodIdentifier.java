@@ -18,6 +18,21 @@ public class MethodIdentifier
 		return null;
 	}
 
+	public static String getCallerClassName(Integer increment)
+	{
+		StackTraceElement[] stElements = Thread.currentThread().getStackTrace();
+		for (int i = 1; i < stElements.length; i++)
+		{
+			StackTraceElement ste = stElements[i];
+			if (!ste.getClassName().equals(MethodIdentifier.class.getName())
+			&& ste.getClassName().indexOf("java.lang.Thread") != 0)
+			{
+				return stElements[i - increment].getClassName();
+			}
+		}
+		return null;
+	}
+
 	public static String[] getThirdCallerClassName()
 	{
 		StackTraceElement[] stElements = Thread.currentThread().getStackTrace();

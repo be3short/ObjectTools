@@ -25,5 +25,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
   //  compile 'com.github.brendan1991:BST:-SNAPSHOT'
      compile 'com.thoughtworks.xstream:xstream:1.4.9'
+      compile 'com.github.brendan1991:IOTools:-SNAPSHOT'
 }
 

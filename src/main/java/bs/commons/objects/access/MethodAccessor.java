@@ -1,16 +1,81 @@
 package bs.commons.objects.access;
 
+import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
+import com.google.common.reflect.ClassPath;
+
 import bs.commons.objects.execution.MethodId;
+import bs.commons.objects.labeling.LabelReader;
+import bs.commons.objects.utilities.ClassUtilities;
 
 public class MethodAccessor
 {
+
+	public static HashMap<String, Method> getStaticMethods(String[] packages, Class... annotations)
+	{
+		ArrayList<Class> annotationsList = new ArrayList<Class>(Arrays.asList(annotations));
+		HashMap<String, Method> methods = new HashMap<String, Method>();
+		try
+		{
+
+			ArrayList<Class> classNames = ClassUtilities.getClassesListFromPackageSection(packages);
+			//IO.debug("Classes in class path : " + classNames.size());
+			for (Class methodClass : classNames)
+			{
+
+				//IO.debug("getting static methods of " + methodClass.getName() + " number of annotations : "
+				//+ methodClass.getAnnotations().length);
+				try
+				{
+					for (Method method : methodClass.getDeclaredMethods())
+					{
+						if (annotationsList.size() > 0)
+						{
+							if (method.getDeclaredAnnotations().length > 0)
+							{
+								//IO.debug("checking method " + method.getName() + " for input annotations "
+								//+ method.getDeclaredAnnotations()[0].toString());
+							}
+							//IO.debug("checking annotation " + annotation.getClass().getName() + " of method "
+							//+ methodClass.getName() + " for input annotations");
+							//if (annotationsList.contains(annotation.annotationType()))
+							for (Class annotation : annotations)
+							{
+								if (method.isAnnotationPresent(annotation))
+								{
+									//IO.debug(
+									//"adding method " + methodClass.getName() + " - has annotation " + annotation.getName());
+									methods.put(method.getName(), method);
+								}
+							}
+						} else
+						{
+							//	IO.debug("adding method " + method.getName());
+							methods.put(method.getName(), method);
+						}
+					}
+				} catch (Exception noclass)
+				{
+
+				}
+
+			}
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return methods;
+	}
 
 	/*
 	 * Gets the methods of an object that match the annotation
@@ -38,6 +103,8 @@ public class MethodAccessor
 					{
 						if (method.getAnnotation(annotation).annotationType().equals(annotation))
 						{
+							String methodLabel = LabelReader.getLabel(method.getAnnotation(annotation));
+							System.out.println(methodLabel);
 							returnMethods.put(method.getName(), method);
 						}
 					} catch (Exception e)
@@ -84,7 +151,7 @@ public class MethodAccessor
 		try
 		{
 			method.setAccessible(true);
-			System.out.println(method.getName() + " " + method.getParameterCount());
+			//System.out.println(method.getName() + " " + method.getParameterCount());
 			return method.invoke(method_class, args);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
 		{

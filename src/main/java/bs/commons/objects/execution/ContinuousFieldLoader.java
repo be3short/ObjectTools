@@ -2,9 +2,10 @@ package bs.commons.objects.execution;
 
 import java.lang.reflect.Field;
 
+import bs.commons.dimvars.values.RandomValue;
 import bs.commons.objects.manipulation.ObjectCloner;
 
-public class ExternalFieldUpdate
+public class ContinuousFieldLoader
 {
 
 	public Field field;
@@ -12,15 +13,16 @@ public class ExternalFieldUpdate
 	public Object variable;
 	public Object value;
 	public String name;
-	//public RandomValue random;
+	public RandomValue random;
 
-	public ExternalFieldUpdate(Field field, Object parent, String name)
+	public ContinuousFieldLoader(Field field, Object parent, String name)
 	{
 		this.field = field;
 		this.parent = parent;
 		this.name = name;
 		try
 		{
+			field.setAccessible(true);
 			this.value = ObjectCloner.xmlClone(field.get(parent));
 			this.variable = field.get(parent);
 			System.out.println(value);
@@ -44,16 +46,16 @@ public class ExternalFieldUpdate
 		}
 	}
 
-	@MethodId(id = "Update")
+	@MethodId(id = MethodLabel.update)
 	public void updateValue(Object val)
 	{
-		//		if (val.getClass().equals(RandomValue.class))
-		//		{
-		//			random = (RandomValue) val;
-		//		} else
-		//		{
-		//			random = null;
-		//		}
+		if (val.getClass().equals(RandomValue.class))
+		{
+			random = (RandomValue) val;
+		} else
+		{
+			random = null;
+		}
 		try
 		{
 			value = val;
@@ -70,10 +72,10 @@ public class ExternalFieldUpdate
 
 	public void loadInitialCondition()
 	{
-		//	if (random != null)
-		//{
-		//value = random.getValue();
-		//}
+		if (random != null)
+		{
+			value = random.getValue();
+		}
 		try
 		{
 			field.setAccessible(true);
@@ -85,6 +87,12 @@ public class ExternalFieldUpdate
 			e.printStackTrace();
 		}
 
+	}
+
+	public static class MethodLabel
+	{
+
+		public static final String update = "Update";
 	}
 
 }

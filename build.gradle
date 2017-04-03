@@ -26,5 +26,6 @@ dependencies {
   //  compile 'com.github.brendan1991:BST:-SNAPSHOT'
      compile 'com.thoughtworks.xstream:xstream:1.4.9'
       compile 'com.github.brendan1991:IOTools:-SNAPSHOT'
+           compile 'com.github.brendan1991:UnitVariables:-SNAPSHOT'
 }
 

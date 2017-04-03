@@ -1,17 +1,10 @@
 package bs.commons.objects.access;
 
-import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
-
-import com.google.common.reflect.ClassPath;
 
 import bs.commons.objects.execution.MethodId;
 import bs.commons.objects.labeling.LabelReader;
@@ -104,7 +97,7 @@ public class MethodAccessor
 						if (method.getAnnotation(annotation).annotationType().equals(annotation))
 						{
 							String methodLabel = LabelReader.getLabel(method.getAnnotation(annotation));
-							System.out.println(methodLabel);
+							//		System.out.println(methodLabel);
 							returnMethods.put(method.getName(), method);
 						}
 					} catch (Exception e)

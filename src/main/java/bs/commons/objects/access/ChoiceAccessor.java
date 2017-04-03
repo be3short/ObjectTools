@@ -3,7 +3,10 @@ package bs.commons.objects.access;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
+import bs.commons.dimvars.core.UnitData;
+import bs.commons.dimvars.core.UnitData.Unit;
 import bs.commons.objects.labeling.ChoiceName;
 
 public class ChoiceAccessor
@@ -23,6 +26,63 @@ public class ChoiceAccessor
 			{
 				names.put((String) choiceName.get(cenum), cenum);
 			} catch (IllegalArgumentException | IllegalAccessException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return names;
+	}
+
+	public static HashMap<String, Object> getChoices(Object... enums)
+	{
+		HashMap<String, Object> names = new HashMap<String, Object>();
+		for (Object cenum : enums)
+		{
+			try
+			{
+				String enumName = ((Enum) cenum).name();
+				String[] splitByUnderscore = enumName.split("_");
+				enumName = "";
+				for (int i = 0; i < splitByUnderscore.length; i++)
+				{
+					if (i > 0)
+					{
+						enumName += " ";
+					}
+					enumName = splitByUnderscore[i].substring(0, 1) + splitByUnderscore[i].substring(1).toLowerCase();
+				}
+				names.put(enumName, cenum);
+			} catch (Exception e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return names;
+	}
+
+	public static HashMap<String, Object> getChoicesUnit(Object... enums)
+	{
+		HashMap<String, Object> names = new HashMap<String, Object>();
+		for (Object cenum : enums)
+		{
+			try
+			{
+				String enumName = UnitData.getUnitData((Unit) cenum).unitAbbreviation;
+				System.out.println(enumName);
+				//String[] splitByUnderscore = enumName.split("_");
+				//enumName = "";
+				//				for (int i = 0; i < splitByUnderscore.length; i++)
+				//				{
+				//					if (i > 0)
+				//					{
+				//						enumName += " ";
+				//					}
+				//					enumName = splitByUnderscore[i].substring(0, 1) + splitByUnderscore[i].substring(1).toLowerCase();
+				//				}
+				names.put(enumName, cenum);
+			} catch (Exception e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();

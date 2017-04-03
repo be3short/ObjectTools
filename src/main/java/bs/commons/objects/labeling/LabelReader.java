@@ -48,14 +48,15 @@ public class LabelReader
 
 	public static <T> T getAnnotationFieldValue(Annotation annotation, String field_name, Class<T> returnClass)
 	{
+		System.out.println(annotation.toString());
 		T value = null;
 		try
 		{
-			value = (T) annotation.getClass().getDeclaredField(field_name).get(annotation);
+			value = (T) (annotation.getClass().getDeclaredField(field_name).get(annotation));
 
 		} catch (Exception e)
 		{
-
+			e.printStackTrace();
 		}
 		return value;
 	}

@@ -24,13 +24,38 @@ public class FieldAccessor
 	public static HashMap<String, Field> getObjectFields(Object object, boolean include_private,
 	@SuppressWarnings("rawtypes") Class... class_filter)
 	{
-		HashMap<String, Field> fields = new HashMap<String, Field>(); // initialize field map
-		Field[] objectFields = object.getClass().getDeclaredFields(); // get all declared fields of object]
 
+		return getObjectFields(object, include_private, true, class_filter);
+	}
+
+	/*
+	 * Gets the fields of an object
+	 * 
+	 * @param object - Object to gather fields from
+	 * 
+	 * @param include_private - Flag to include private fields
+	 * 
+	 * @param - class_filter - Desired field classes to search for - all other
+	 * classes filtered
+	 * 
+	 * @return Mapping of fields indexed by field name
+	 */
+	public static HashMap<String, Field> getObjectFields(Object object, boolean include_private, boolean declared_only,
+	@SuppressWarnings("rawtypes") Class... class_filter)
+	{
+		HashMap<String, Field> fields = new HashMap<String, Field>(); // initialize field map
+		Field[] objectFields = null;
+		if (declared_only)
+		{
+			objectFields = object.getClass().getDeclaredFields(); // get all declared fields of object]
+		} else
+		{
+			objectFields = object.getClass().getFields(); // get all declared fields of object]
+		}
 		for (Field field : objectFields) // iterate through fields
 		{
 			boolean filter = false; // initialize filter flag
-
+			field.setAccessible(true);
 			if (class_filter.length > 0) // there are specific field classes  
 			{
 				filter = true; // filter the current field unless class matches filter
@@ -63,6 +88,25 @@ public class FieldAccessor
 	}
 
 	/*
+	 * Gets the fields of an object
+	 * 
+	 * @param object - Object to gather fields from
+	 * 
+	 * @param include_private - Flag to include private fields
+	 * 
+	 * @param - class_filter - Desired field classes to search for - all other
+	 * classes filtered
+	 * 
+	 * @return Mapping of fields indexed by field name
+	 */
+	public static HashMap<String, Object> getObjectFieldValues(Object object, boolean include_private,
+	@SuppressWarnings("rawtypes") Class... class_filter)
+	{
+
+		return getObjectFieldValues(object, include_private, true, class_filter);
+	}
+
+	/*
 	 * Gets the field values of an object
 	 * 
 	 * @param object - Object to gather fields from
@@ -75,16 +119,18 @@ public class FieldAccessor
 	 * @return Mapping of fields indexed by field name
 	 */
 	public static HashMap<String, Object> getObjectFieldValues(Object object, boolean include_private,
-	@SuppressWarnings("rawtypes") Class... field_classes)
+	boolean declared_only, @SuppressWarnings("rawtypes") Class... field_classes)
 	{
-		HashMap<String, Field> fields = getObjectFields(object, include_private, field_classes); // get the fields of the object
+		HashMap<String, Field> fields = getObjectFields(object, include_private, declared_only, field_classes); // get the fields of the object
 		HashMap<String, Object> fieldValues = new HashMap<String, Object>(); // initialize field value map
 
 		for (String fieldName : fields.keySet()) // iterate through the field names
 		{
 			try
 			{
+
 				Field field = fields.get(fieldName); // get the current field
+				field.setAccessible(true);
 				Object fieldValue = field.get(object); // get the value of the current field
 				fieldValues.put(fieldName, fieldValue); // store the value in the field value map
 

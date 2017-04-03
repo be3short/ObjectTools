@@ -1,7 +1,5 @@
 package bs.commons.objects.utilities;
 
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,7 +21,7 @@ public class ClassUtilities
 			ArrayList<Class> classNames = new ArrayList<Class>();
 			for (ClassInfo info : classpath.getTopLevelClasses())
 			{
-				System.out.println("Top Level Class Found :" + info.getName());
+				//System.out.println("Top Level Class Found :" + info.getName());
 				boolean containsAllSections = false;
 				if (section.length > 0)
 				{
@@ -164,8 +162,6 @@ public class ClassUtilities
 			}
 			return null;
 		}
-		
-		
 
 	}
 }

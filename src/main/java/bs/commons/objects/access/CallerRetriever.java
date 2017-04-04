@@ -1,7 +1,11 @@
 package bs.commons.objects.access;
 
+import java.util.ArrayList;
+
 public class CallerRetriever
 {
+
+	public static CallingClass retriever = new CallingClass();
 
 	public static void main(String args[])
 	{
@@ -34,6 +38,20 @@ public class CallerRetriever
 		public Class[] getCallingClasses()
 		{
 			return getClassContext();
+		}
+
+		public Class getCallingClass(ArrayList<String> package_filters)
+		{
+
+			Class[] stack = getCallingClasses();
+			Integer ind = 0;
+			Class caller = stack[0];
+			while (caller.getPackage().getName().contains("bs.commons.objects")
+			&& !package_filters.contains(caller.getPackage().getName()))
+			{
+				caller = stack[++ind];
+			}
+			return caller;
 		}
 
 		public String getListOfCallingClasses()

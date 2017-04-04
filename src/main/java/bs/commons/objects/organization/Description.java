@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import bs.commons.objects.access.Protected;
 
-public class VariableName
+public class Description
 {
 
 	public final Protected<String> title; // description of the object -ie "Storage Device" or "UAV"
@@ -13,7 +13,7 @@ public class VariableName
 	public final Protected<String> suffix; // optional suffix to the objects name - ie a relavant specification
 	private HashMap<NameComponent, Protected<String>> componentMap; // map to all name components, which allows name to be extracted in any format
 
-	public VariableName(String title)
+	public Description(String title)
 	{
 		this.title = new Protected<String>(title, true);
 		this.description = new Protected<String>("", true);
@@ -22,7 +22,7 @@ public class VariableName
 		componentMap = initializeComponentMap();
 	}
 
-	public VariableName(String title, String description)
+	public Description(String title, String description)
 	{
 		this.title = new Protected<String>(title, true);
 		this.description = new Protected<String>(description, true);
@@ -31,7 +31,7 @@ public class VariableName
 		componentMap = initializeComponentMap();
 	}
 
-	public VariableName(String title, String description, String prefix)
+	public Description(String title, String description, String prefix)
 	{
 		this.title = new Protected<String>(title, true);
 		this.description = new Protected<String>(description, true);
@@ -40,7 +40,7 @@ public class VariableName
 		componentMap = initializeComponentMap();
 	}
 
-	public VariableName(String title, String description, String prefix, String suffix)
+	public Description(String title, String description, String prefix, String suffix)
 	{
 		this.title = new Protected<String>(title, true);
 		this.description = new Protected<String>(description, true);
@@ -59,10 +59,10 @@ public class VariableName
 		return map;
 	}
 
-	public String getName(DescriptiveComponent... format)
+	public String getName(Information... format)
 	{
 		String nameStructure = "";
-		for (DescriptiveComponent component : format)
+		for (Information component : format)
 		{
 			if (nameStructure.length() > 0)
 			{
@@ -73,7 +73,7 @@ public class VariableName
 		return nameStructure;
 	}
 
-	public static enum NameComponent implements DescriptiveComponent
+	public static enum NameComponent implements Information
 	{
 		TITLE,
 		DESCRIPTION,

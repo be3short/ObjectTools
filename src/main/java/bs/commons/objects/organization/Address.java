@@ -18,7 +18,7 @@ public class Address
 		objectNumber = new Protected<Integer>(-1, true);
 	}
 
-	public static enum AddressComponent implements DescriptiveComponent
+	public static enum AddressComponent implements Information
 	{
 		ADDRESS,
 		LOCAL,

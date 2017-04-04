@@ -5,5 +5,5 @@ public interface ObjectType
 
 	public String getTypeName();
 
-	public ObjectId generateId(String title);
+	//public ObjectId generateId(String title);
 }

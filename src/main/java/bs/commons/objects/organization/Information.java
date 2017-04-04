@@ -1,6 +1,6 @@
 package bs.commons.objects.organization;
 
-public interface DescriptiveComponent
+public interface Information
 {
 
 	public InformationCategory getCategory();

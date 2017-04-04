@@ -5,19 +5,29 @@ public class ObjectId
 
 	private ObjectType type; // type of object this id represents
 	private Address address; // address of the object represented by this id
-	private VariableName name; // name of the object represented by this id, which can contain additional data that can be displayed or hidden depending on the usage
+	private Description name; // name of the object represented by this id, which can contain additional data that can be displayed or hidden depending on the usage
 
 	public ObjectId(String name, ObjectType type)
 	{
 
 		this.type = type;
-		this.name = new VariableName(name);
+		this.name = new Description(name);
 		this.address = new Address();
 	}
 
 	public ObjectType type()
 	{
 		return type;
+	}
+
+	public Address address()
+	{
+		return address;
+	}
+
+	public Description description()
+	{
+		return name;
 	}
 
 	public String getName()
@@ -44,16 +54,6 @@ public class ObjectId
 	public Integer getIndex()
 	{
 		return null;//localIndex;
-	}
-
-	public Integer getAddress()
-	{
-		return null;//address;
-	}
-
-	public void setAddress(Integer address)
-	{
-		this.address.address.set(address);
 	}
 
 	private static class IDFactory

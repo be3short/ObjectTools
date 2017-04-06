@@ -117,6 +117,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import bs.commons.io.system.StringFormatter;
+import bs.commons.objects.organization.Identified;
+import bs.commons.objects.organization.ObjectId;
 
 public class ObjectFinder
 {
@@ -126,6 +128,77 @@ public class ObjectFinder
 	public static void setDeeperSearchClasses(Class[] deeper)
 	{
 		deeperSearchClasses.addAll(Arrays.asList(deeper));
+	}
+
+	public static <S> HashMap<String, S> findSuperClassSubObjectz(Object search_obj, Class<S> search_class)
+	{
+		ArrayList<Object> scanned = new ArrayList<Object>();
+		return findSuperClassSubObjectz(search_obj, search_class, scanned);
+	}
+
+	public static <S> HashMap<String, S> findSuperClassSubObjectz(Object search_obj, Class<S> search_class,
+	ArrayList<Object> already_scanned)
+	{
+		HashMap<String, S> states = new HashMap<String, S>();
+		if (!already_scanned.contains(search_obj))
+		{
+			already_scanned.add(search_obj);
+
+			HashMap<String, Object> fieldObjects = FieldAccessor.getObjectFieldValues(search_obj, true, true);
+			for (String fieldName : fieldObjects.keySet())
+			{
+				try
+				{
+					boolean searchDeeper = false;
+					//System.out.println(fieldName);
+					Object sysObj = fieldObjects.get(fieldName);
+					Class superClass = sysObj.getClass();
+
+					while (superClass != Object.class)
+					{
+						Object newSysObj = superClass.cast(sysObj);
+						if (superClass.equals(search_class))
+						{
+							S potentialState = (S) newSysObj;
+							if (!states.values().contains(potentialState))
+							{
+								if (potentialState != null)
+								{
+									states.put(StringFormatter.getAppendedName(fieldName, states.keySet()),
+									potentialState);
+								}
+							}
+						} //else if (deeperSearchClasses.contains(superClass))
+							//					{
+							//						searchDeeper = true;
+							//						if (searchDeeper)
+							//						{
+						HashMap<String, S> deeperClasses = findSuperClassSubObjectz(sysObj, search_class,
+						already_scanned);
+						for (String deeperClass : deeperClasses.keySet())
+						{
+							if (!states.values().contains(deeperClasses.get(deeperClass)))
+							{
+								states.put(StringFormatter.getAppendedName(deeperClass, states.keySet()),
+								deeperClasses.get(deeperClass));
+
+							}
+						}
+						//	}
+						//	}
+						sysObj = newSysObj;
+						superClass = superClass.getSuperclass();
+						//	System.out.println(superClass.getName());
+
+					}
+
+				} catch (Exception e)
+				{
+					//e.printStackTrace();
+				}
+			}
+		}
+		return states;
 	}
 
 	public static <S> HashMap<String, S> findSuperClassSubObjects(Object search_obj, Class<S> search_class)
@@ -186,6 +259,19 @@ public class ObjectFinder
 		return states;
 	}
 
+	public static <S extends Identified> HashMap<ObjectId, S> getHybridSystemsByID(Object search_obj,
+	Class<S> search_class)
+	{
+		HashMap<String, S> namedMap = getHybridSystems(search_obj, search_class);
+		HashMap<ObjectId, S> idMap = new HashMap<ObjectId, S>();
+		for (S item : namedMap.values())
+		{
+			idMap.put(item.id(), item);
+		}
+		return idMap;
+
+	}
+
 	public static <S> HashMap<String, S> getHybridSystems(Object search_obj, Class<S> search_class)
 	{
 		HashMap<String, S> states = new HashMap<String, S>();
@@ -210,6 +296,7 @@ public class ObjectFinder
 
 						}
 					}
+
 					sysObj = newSysObj;
 					superClass = superClass.getSuperclass();
 					//	System.out.println(superClass.getName());

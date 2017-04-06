@@ -1,8 +1,19 @@
 package bs.commons.objects.organization;
 
+import java.util.ArrayList;
+
+import bs.commons.objects.access.Protected;
+
 public class ObjectId
 {
 
+	public ArrayList<Protected<ObjectId>> getChildren()
+	{
+		return children;
+	}
+
+	Protected<ObjectId> parent; // id of parent 
+	ArrayList<Protected<ObjectId>> children; // id of children
 	private ObjectType type; // type of object this id represents
 	private Address address; // address of the object represented by this id
 	private Description name; // name of the object represented by this id, which can contain additional data that can be displayed or hidden depending on the usage
@@ -13,6 +24,8 @@ public class ObjectId
 		this.type = type;
 		this.name = new Description(name);
 		this.address = new Address();
+		children = new ArrayList<Protected<ObjectId>>();
+		parent = new Protected<ObjectId>(null, true);
 	}
 
 	public ObjectType type()
@@ -32,7 +45,19 @@ public class ObjectId
 
 	public String getName()
 	{
-		return null;
+		return name.description.get();
+	}
+
+	public String getLineage()
+	{
+		String root = name.description.get();
+		Protected<ObjectId> parentId = parent;
+		while (parentId.get() != null)
+		{
+			root = parentId.get().description().description.get() + " - " + root;
+			parentId = parentId.get().parent;
+		}
+		return root;
 	}
 
 	public String getName(boolean simple)
@@ -54,6 +79,17 @@ public class ObjectId
 	public Integer getIndex()
 	{
 		return null;//localIndex;
+	}
+
+	public String printTree()
+	{
+		Integer indentIndex = 0;
+		String root = description().description.get() + "\n";
+		for (Protected<ObjectId> child : getChildren())
+		{
+			root += child.get().printTree() + "\n";
+		}
+		return root;
 	}
 
 	private static class IDFactory

@@ -11,14 +11,17 @@ public class Description
 	public final Protected<String> description; // name of the object - ie "Generic HD Video Camera" "Randomized Temperature Sensor"
 	public final Protected<String> prefix; // optional prefix to the objects name - ie a specific part number
 	public final Protected<String> suffix; // optional suffix to the objects name - ie a relavant specification
+	public final Protected<String> information; // optional information about the object
+
 	private HashMap<NameComponent, Protected<String>> componentMap; // map to all name components, which allows name to be extracted in any format
 
 	public Description(String title)
 	{
 		this.title = new Protected<String>(title, true);
-		this.description = new Protected<String>("", true);
+		this.description = new Protected<String>(title, true);
 		this.prefix = new Protected<String>("", true);
 		this.suffix = new Protected<String>("", true);
+		this.information = new Protected<String>("", true);
 		componentMap = initializeComponentMap();
 	}
 
@@ -28,6 +31,7 @@ public class Description
 		this.description = new Protected<String>(description, true);
 		this.prefix = new Protected<String>("", true);
 		this.suffix = new Protected<String>("", true);
+		this.information = new Protected<String>("", true);
 		componentMap = initializeComponentMap();
 	}
 
@@ -37,6 +41,7 @@ public class Description
 		this.description = new Protected<String>(description, true);
 		this.prefix = new Protected<String>(prefix, true);
 		this.suffix = new Protected<String>("", true);
+		this.information = new Protected<String>("", true);
 		componentMap = initializeComponentMap();
 	}
 
@@ -46,6 +51,7 @@ public class Description
 		this.description = new Protected<String>(description, true);
 		this.prefix = new Protected<String>(prefix, true);
 		this.suffix = new Protected<String>(suffix, true);
+		this.information = new Protected<String>("", true);
 		componentMap = initializeComponentMap();
 	}
 
@@ -56,11 +62,16 @@ public class Description
 		map.put(NameComponent.DESCRIPTION, description);
 		map.put(NameComponent.PREFIX, prefix);
 		map.put(NameComponent.SUFFIX, suffix);
+
 		return map;
 	}
 
 	public String getName(Information... format)
 	{
+		if (format.length == 0)
+		{
+			return description.get();
+		}
 		String nameStructure = "";
 		for (Information component : format)
 		{
@@ -70,6 +81,7 @@ public class Description
 			}
 			nameStructure += componentMap.get(component).get();
 		}
+
 		return nameStructure;
 	}
 

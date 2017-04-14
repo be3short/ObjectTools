@@ -45,6 +45,8 @@ public class FindParentTest
 	{
 
 		public Child child;
+
+		public HashMap<String, Child> childs;
 		public static Integer counter = 0;
 		public Integer i = counter;
 
@@ -52,6 +54,8 @@ public class FindParentTest
 		{
 			super();
 			child = new Child();
+			childs = new HashMap<String, Child>();
+			childs.put("1", new Child());
 			i = counter++;
 		}
 
@@ -69,8 +73,8 @@ public class FindParentTest
 
 	public static void main(String args[])
 	{
-		//matchingTest();
-		largeMatchingTest();
+		matchingTest();
+		//largeMatchingTest();
 	}
 
 	public static void largeMatchingTest()
@@ -103,9 +107,9 @@ public class FindParentTest
 
 		Parent parent = new Parent();
 		Parent parent2 = new Parent();
-		System.out.println(parent.child.getClass().getDeclaringClass().getName());
-		System.out.println(parent2.child.getClass().getDeclaringClass());
-		System.out.println(parent.containsChild(parent2.child));
-		System.out.println(parent.containsAChild(parent.child));
+		//System.out.println(parent.child.getClass().getDeclaringClass().getName());
+		//System.out.println(parent2.child.getClass().getDeclaringClass());
+		System.out.println(parent.containsChild(parent.childs.get("1")));
+		//System.out.println(parent.containsAChild(parent.child));
 	}
 }

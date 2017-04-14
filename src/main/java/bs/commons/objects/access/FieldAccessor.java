@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
+import bs.commons.io.system.StringFormatter;
 import bs.commons.objects.labeling.LabelReader;
 
 public class FieldAccessor
@@ -40,17 +41,24 @@ public class FieldAccessor
 	 * 
 	 * @return Mapping of fields indexed by field name
 	 */
-	public static HashMap<String, Field> getObjectFields(Object object, boolean include_private, boolean declared_only,
+	public static HashMap<String, Field> getObjectFields(Object object, boolean include_private, Boolean declared_only,
 	@SuppressWarnings("rawtypes") Class... class_filter)
 	{
 		HashMap<String, Field> fields = new HashMap<String, Field>(); // initialize field map
 		Field[] objectFields = null;
-		if (declared_only)
+		if (declared_only == null)
 		{
-			objectFields = object.getClass().getDeclaredFields(); // get all declared fields of object]
+
 		} else
 		{
-			objectFields = object.getClass().getFields(); // get all declared fields of object]
+			if (declared_only)
+			{
+
+				objectFields = object.getClass().getDeclaredFields(); // get all declared fields of object]
+			} else
+			{
+				objectFields = object.getClass().getFields(); // get all declared fields of object]
+			}
 		}
 		for (Field field : objectFields) // iterate through fields
 		{
@@ -132,7 +140,7 @@ public class FieldAccessor
 				Field field = fields.get(fieldName); // get the current field
 				field.setAccessible(true);
 				Object fieldValue = field.get(object); // get the value of the current field
-				fieldValues.put(fieldName, fieldValue); // store the value in the field value map
+				fieldValues.put(StringFormatter.getAppendedName(fieldName, fieldValues.keySet()), fieldValue); // store the value in the field value map
 
 			} catch (Exception noFieldAccess) // couldn't access the value of the field
 			{

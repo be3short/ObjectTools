@@ -310,4 +310,62 @@ public class ObjectFinder
 		}
 		return states;
 	}
+
+	public static boolean containsInterface(Object item, Class search_class)
+	{
+		Object sysObj = item;
+		Class superClass = sysObj.getClass();
+		while (superClass != Object.class)
+		{
+
+			//System.out.println(superClass);
+			if (superClass.getInterfaces().equals(search_class))
+			{
+
+				//System.out.println("yep");
+				return true;
+			}
+
+			superClass = superClass.getSuperclass();
+			Object newSysObj = superClass.cast(sysObj);
+			sysObj = newSysObj;
+			//	System.out.println(superClass.getName());
+
+		}
+		//System.out.println("nope");
+		return false;
+	}
+
+	public static boolean containsSuper(Object item, Class search_class)
+	{
+		boolean contains = false;
+		contains = contains || containsSuperClass(item, search_class);
+		contains = contains || containsInterface(item, search_class);
+		return contains;
+	}
+
+	public static boolean containsSuperClass(Object item, Class search_class)
+	{
+		Object sysObj = item;
+		Class superClass = sysObj.getClass();
+		while (superClass != Object.class)
+		{
+
+			//	System.out.println(superClass);
+			if (superClass.equals(search_class))
+			{
+
+				//		System.out.println("yep");
+				return true;
+			}
+
+			superClass = superClass.getSuperclass();
+			Object newSysObj = superClass.cast(sysObj);
+			sysObj = newSysObj;
+			//	System.out.println(superClass.getName());
+
+		}
+		//	System.out.println("nope");
+		return false;
+	}
 }

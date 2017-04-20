@@ -179,11 +179,11 @@ public class FieldAccessor
 				field.setAccessible(true);
 				if (field.getDeclaredAnnotation(annotation) != null)
 				{
-					System.out.println(field.getType());
+					//System.out.println(field.getType());
 					String name = LabelReader.getLabel(annotation, field);
 					if (name == null)
 					{
-						System.out.println(name);
+						//System.out.println(name);
 						name = fieldName;
 					}
 

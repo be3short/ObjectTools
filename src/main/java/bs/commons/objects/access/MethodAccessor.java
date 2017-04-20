@@ -19,7 +19,7 @@ public class MethodAccessor
 		HashMap<String, Method> methods = new HashMap<String, Method>();
 		try
 		{
-
+			Integer i = 0;
 			ArrayList<Class> classNames = ClassUtilities.getClassesListFromPackageSection(packages);
 			//IO.debug("Classes in class path : " + classNames.size());
 			for (Class methodClass : classNames)
@@ -43,7 +43,7 @@ public class MethodAccessor
 							//if (annotationsList.contains(annotation.annotationType()))
 							for (Class annotation : annotations)
 							{
-								if (method.isAnnotationPresent(annotation))
+								if (FieldFinder.containsSuper(method, annotation))
 								{
 									//IO.debug(
 									//"adding method " + methodClass.getName() + " - has annotation " + annotation.getName());
@@ -160,7 +160,7 @@ public class MethodAccessor
 		{
 			Method method = getEventMethod(method_class, method_id);
 			method.setAccessible(true);
-			System.out.println(method.getName() + " " + method.getParameterCount());
+			//		System.out.println(method.getName() + " " + method.getParameterCount());
 			return method.invoke(method_class, args);
 		} catch (Exception e)
 		{

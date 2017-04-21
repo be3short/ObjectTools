@@ -1,13 +1,11 @@
 package bs.commons.objects.access;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
-import bs.commons.dimvars.core.UnitData;
-import bs.commons.dimvars.core.UnitData.Unit;
 import bs.commons.objects.labeling.ChoiceName;
+import bs.commons.unitvars.core.UnitData;
+import bs.commons.unitvars.core.UnitData.Unit;
 
 public class ChoiceAccessor
 {

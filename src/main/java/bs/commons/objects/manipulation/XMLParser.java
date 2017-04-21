@@ -5,15 +5,10 @@ import java.util.ArrayList;
 
 import com.thoughtworks.xstream.XStream;
 
-import bs.commons.io.system.IO.MessageCategory;
-import bs.commons.io.system.IOFilter;
-import bs.commons.objects.access.CallerRetriever;
-
 public class XMLParser
 {
 
 	private static ArrayList<String> ownClassFilter = getOwnPackageFilter();
-	public static IOFilter speedFilter;
 	public static XStream xstream = new XStream();
 
 	public static String serializeObject(Object obj)
@@ -27,29 +22,6 @@ public class XMLParser
 		} catch (Exception e)
 		{
 
-		}
-		return returnString;
-
-	}
-
-	public static String serializeObject(Object obj, MessageCategory category)
-	{
-
-		String returnString = null;
-		boolean filterParse = false;
-		if (speedFilter != null)
-		{
-			filterParse = speedFilter.printStatus(CallerRetriever.retriever.getCallingClass(ownClassFilter), category);
-		}
-		if (!filterParse)
-		{
-			try
-			{
-				returnString = xstream.toXML(obj);
-			} catch (Exception e)
-			{
-
-			}
 		}
 		return returnString;
 

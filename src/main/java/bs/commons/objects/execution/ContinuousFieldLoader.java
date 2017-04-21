@@ -2,7 +2,6 @@ package bs.commons.objects.execution;
 
 import java.lang.reflect.Field;
 
-import bs.commons.dimvars.values.RandomValue;
 import bs.commons.objects.manipulation.ObjectCloner;
 
 public class ContinuousFieldLoader
@@ -13,7 +12,7 @@ public class ContinuousFieldLoader
 	public Object variable;
 	public Object value;
 	public String name;
-	public RandomValue random;
+	//public RandomValue random;
 
 	public ContinuousFieldLoader(Field field, Object parent, String name)
 	{
@@ -49,13 +48,13 @@ public class ContinuousFieldLoader
 	@MethodId(id = MethodLabel.update)
 	public void updateValue(Object val)
 	{
-		if (val.getClass().equals(RandomValue.class))
-		{
-			random = (RandomValue) val;
-		} else
-		{
-			random = null;
-		}
+		//		if (val.getClass().equals(RandomValue.class))
+		//		{
+		//			random = (RandomValue) val;
+		//		} else
+		//		{
+		//			random = null;
+		//		}
 		try
 		{
 			value = val;
@@ -72,20 +71,20 @@ public class ContinuousFieldLoader
 
 	public void loadInitialCondition()
 	{
-		if (random != null)
-		{
-			value = random.getValue();
-		}
-		try
-		{
-			field.setAccessible(true);
-			field.set(parent, value);
-			System.out.println(field.getName() + " " + value);
-		} catch (IllegalArgumentException | IllegalAccessException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		//		if (random != null)
+		//		{
+		//			value = random.getValue();
+		//		}
+		//		try
+		//		{
+		//			field.setAccessible(true);
+		//			field.set(parent, value);
+		//			System.out.println(field.getName() + " " + value);
+		//		} catch (IllegalArgumentException | IllegalAccessException e)
+		//		{
+		//			// TODO Auto-generated catch block
+		//			e.printStackTrace();
+		//		}
 
 	}
 

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import bs.commons.objects.access.ObjectFinder;
 import bs.commons.objects.access.Protected;
-import bs.commons.objects.access.test.FindParentTest.Parent;
 import bs.commons.objects.hiearchy.interfaces.GlobalHierarchy;
 import bs.commons.objects.hiearchy.interfaces.HierarchicalComponent;
 
@@ -20,9 +19,9 @@ public class HierarchicalRoot implements GlobalHierarchy
 
 	public Protected<HierarchicalLayer> addLayer(Protected<Object> obj, Protected<HierarchicalLayer> parent)
 	{
-		//		Protected<HierarchicalLayer> layer = HierarchicalLayer.getLayer(obj, this, parent);
-		//		allObjects.add(layer);
-		//		return layer;
+		Protected<HierarchicalLayer> layer = HierarchicalLayer.getLayer(obj, this, parent);
+		allObjects.add(layer);
+		return layer;
 	}
 
 	public <T> ArrayList<T> getAllObjects(Class<T> obj_class)
@@ -119,62 +118,69 @@ public class HierarchicalRoot implements GlobalHierarchy
 		return null;
 	}
 
-	public static void main(String args[])
-	{
-		//matchingTest();
-		largeMatchingTest();
-	}
-
-	public static void largeMatchingTest()
-	{
-		HierarchicalRoot hei = new HierarchicalRoot();
-		for (Integer i = 0; i < 10; i++)
-		{
-			Parent np = new Parent();
-			hei.addLayer(np);
-			hei.addLayer(np.child);
-		}
-
-		hei.findAllParents();
-		for (Protected<HierarchicalLayer> l : hei.allObjects)
-		{
-			System.out.println(l.get().getSelf().toString() + "\n" + "Parent:" + "\n" + "\n");
-			for (Protected<HierarchicalLayer> h : l.get().children)
-			{
-				System.out.println("Child " + h.get().getSelf().getClass() + "\n");
-			}
-		}
-		//System.out.println(XMLParser.serializeObject(hei));
-	}
-
-	public String printLevels()
-	{
-		findAllParents();
-		String print = "Hierarchy\n";
-		for (Protected<HierarchicalLayer> l : allObjects)
-		{
-			if (l.get().getSelf() != null)
-			{
-				print += "Self: " + l.get().getSelf().toString() + "\n";
-
-				if (l.get().parent.get() != null)
-				{
-					print += "Parent: " + l.get().getParent().get().getSelf() + "\n";
-				}
-				for (Protected<HierarchicalLayer> h : l.get().children)
-				{
-					print += ("Child " + h.get().getSelf().toString() + "\n");
-				}
-			}
-		}
-		return print;
-	}
-
 	@Override
 	public HierarchicalRoot getRoot()
 	{
 		// TODO Auto-generated method stub
-		return this;
+		return null;
 	}
+
+	//	public static void main(String args[])
+	//	{
+	//		//matchingTest();
+	//		largeMatchingTest();
+	//	}
+	//
+	//	public static void largeMatchingTest()
+	//	{
+	//		HierarchicalRoot hei = new HierarchicalRoot();
+	//		for (Integer i = 0; i < 10; i++)
+	//		{
+	//			Parent np = new Parent();
+	//			hei.addLayer(np);
+	//			hei.addLayer(np.child);
+	//		}
+	//
+	//		hei.findAllParents();
+	//		for (Protected<HierarchicalLayer> l : hei.allObjects)
+	//		{
+	//			System.out.println(l.get().getSelf().toString() + "\n" + "Parent:" + "\n" + "\n");
+	//			for (Protected<HierarchicalLayer> h : l.get().children)
+	//			{
+	//				System.out.println("Child " + h.get().getSelf().getClass() + "\n");
+	//			}
+	//		}
+	//		//System.out.println(XMLParser.serializeObject(hei));
+	//	}
+	//
+	//	public String printLevels()
+	//	{
+	//		findAllParents();
+	//		String print = "Hierarchy\n";
+	//		for (Protected<HierarchicalLayer> l : allObjects)
+	//		{
+	//			if (l.get().getSelf() != null)
+	//			{
+	//				print += "Self: " + l.get().getSelf().toString() + "\n";
+	//
+	//				if (l.get().parent.get() != null)
+	//				{
+	//					print += "Parent: " + l.get().getParent().get().getSelf() + "\n";
+	//				}
+	//				for (Protected<HierarchicalLayer> h : l.get().children)
+	//				{
+	//					print += ("Child " + h.get().getSelf().toString() + "\n");
+	//				}
+	//			}
+	//		}
+	//		return print;
+	//	}
+	//
+	//	@Override
+	//	public HierarchicalRoot getRoot()
+	//	{
+	//		// TODO Auto-generated method stub
+	//		return this;
+	//	}
 
 }

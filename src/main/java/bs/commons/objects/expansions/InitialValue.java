@@ -1,7 +1,5 @@
 package bs.commons.objects.expansions;
 
-import bs.commons.io.system.IO;
-
 public class InitialValue<T>
 {
 
@@ -52,7 +50,7 @@ public class InitialValue<T>
 			range.setValues(min, max);
 		} else
 		{
-			IO.warn("attempted to set double min and max values when value type is " + value.getClass());
+			//IO.warn("attempted to set double min and max values when value type is " + value.getClass());
 		}
 
 	}
@@ -65,7 +63,8 @@ public class InitialValue<T>
 			if (range.getUpper() != null && range.getLower() != null)
 			{
 
-				return (T) Double.class.cast((Double) range.getUpper() * Math.random() + (Double) range.getLower());
+				return (T) Double.class.cast(
+				((Double) range.getUpper() - (Double) range.getLower()) * Math.random() + (Double) range.getLower());
 			} else
 			{
 				return (T) range.getLower();

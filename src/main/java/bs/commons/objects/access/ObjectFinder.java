@@ -116,7 +116,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import bs.commons.io.system.StringFormatter;
+import bs.commons.objects.labeling.StringFormatter;
 import bs.commons.objects.organization.Identified;
 import bs.commons.objects.organization.ObjectId;
 

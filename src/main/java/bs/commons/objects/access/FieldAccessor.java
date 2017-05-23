@@ -4,8 +4,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 
-import bs.commons.io.system.StringFormatter;
 import bs.commons.objects.labeling.LabelReader;
+import bs.commons.objects.labeling.StringFormatter;
 
 public class FieldAccessor
 {

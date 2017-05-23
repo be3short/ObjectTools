@@ -1,5 +1,10 @@
 package bs.commons.objects.expansions;
 
+import bs.commons.objects.access.FieldFinder;
+import bs.commons.objects.manipulation.ObjectCloner;
+import bs.commons.unitvars.core.UnitData.Unit;
+import bs.commons.unitvars.core.UnitValue;
+
 public class InitialValue<T>
 {
 
@@ -21,7 +26,27 @@ public class InitialValue<T>
 				range = new Range<Double>(initialRange, null, Double.class);
 			} else
 			{
-				range = null;
+				try
+				{
+					if (FieldFinder.containsSuper(value, UnitValue.class))
+					{
+						Unit defaultUnit = (Unit) ObjectCloner.xmlClone(((UnitValue) value).getUnit());
+						Double unitVal = (Double) ((UnitValue) value).get(defaultUnit);
+						range = new Range<Double>(unitVal, null, Double.class);
+						// try
+						// {
+						// initialVal = new InitialValue<T>(get());
+						// } catch (UnitException e)
+						// {
+						// // TODO Auto-generated catch block
+						// // initialVal = new InitialValue<T>(get());
+						// e.printStackTrace();
+						// }
+					}
+				} catch (Exception badClass)
+				{
+
+				}
 			}
 		}
 		this.value = value;
@@ -50,7 +75,8 @@ public class InitialValue<T>
 			range.setValues(min, max);
 		} else
 		{
-			//IO.warn("attempted to set double min and max values when value type is " + value.getClass());
+			// IO.warn("attempted to set double min and max values when value
+			// type is " + value.getClass());
 		}
 
 	}

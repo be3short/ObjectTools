@@ -64,7 +64,7 @@ public class InitialValue<T>
 			{
 
 				return (T) Double.class.cast(
-				((Double) range.getUpper() - (Double) range.getLower()) * Math.random() + (Double) range.getLower());
+				(((Double) range.getUpper() - (Double) range.getLower()) * Math.random()) + (Double) range.getLower());
 			} else
 			{
 				return (T) range.getLower();

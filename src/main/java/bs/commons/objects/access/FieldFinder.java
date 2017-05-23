@@ -18,7 +18,7 @@ public class FieldFinder
 			{
 
 				//System.out.println(superClass);
-				if (superClass.getInterfaces().equals(search_class))
+				if (Arrays.asList(superClass.getInterfaces()).contains(search_class))
 				{
 
 					//System.out.println("yep");

@@ -25,8 +25,12 @@ public class CallerRetriever
 		public void checkSelf()
 		{
 			CallingClass caller = new CallingClass();
+			for (Class className : caller.getCallingClasses())
+			{
+				System.out.println(className.getSimpleName());
+			}
 			//System.out.println(caller.getCallingClasses()[2].getSimpleName());
-			System.out.println(caller.getListOfCallingClasses());
+			//System.out.println(caller.getListOfCallingClasses());
 		}
 	}
 

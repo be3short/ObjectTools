@@ -3,8 +3,6 @@ package bs.commons.objects.labeling;
 import java.util.Calendar;
 import java.util.Set;
 
-import bs.commons.unitvars.values.Memory;
-
 public class StringFormatter
 {
 
@@ -34,8 +32,9 @@ public class StringFormatter
 		{
 			output = output + ("\n");
 		}
-		//printSeparationBar(false);
-		//		Double barsPerSide = (NAFSetting.Interface.headerLength - (title.length() + 6.0)) / 2;
+		// printSeparationBar(false);
+		// Double barsPerSide = (NAFSetting.Interface.headerLength -
+		// (title.length() + 6.0)) / 2;
 
 		output = "[ " + title + " ] ";
 
@@ -62,7 +61,7 @@ public class StringFormatter
 
 	public static void printEvenHeader(String title, boolean following_space, boolean preceding_space)
 	{
-		//	SysIO.system(getEvenHeader(title, following_space, preceding_space));
+		// SysIO.system(getEvenHeader(title, following_space, preceding_space));
 	}
 
 	public static void printSeparationBar(boolean following_space)
@@ -278,10 +277,14 @@ public class StringFormatter
 
 	public static String getMemoryUsageInfoString()
 	{
-		Memory memoryUsed = Memory
-		.newBytesValue(Double.valueOf(Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));
-		String returnString = "[" + Math.round(memoryUsed.megabytes()) + "/";
-		//	+ Math.round((MemoryVariable.getMaximumAvailableSystemMemory().getValue(MemoryUnits.MB))) + "](Mb)";
+		// Memory memoryUsed = Memory
+		// .newBytesValue(Double.valueOf(Runtime.getRuntime().totalMemory() -
+		// Runtime.getRuntime().freeMemory()));
+		String returnString = "";// "[" + Math.round(memoryUsed.megabytes()) +
+									// "/";
+		// +
+		// Math.round((MemoryVariable.getMaximumAvailableSystemMemory().getValue(MemoryUnits.MB)))
+		// + "](Mb)";
 		return returnString;
 	}
 }

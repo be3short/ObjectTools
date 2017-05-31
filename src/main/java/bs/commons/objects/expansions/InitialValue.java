@@ -1,118 +1,123 @@
 package bs.commons.objects.expansions;
 
-import bs.commons.objects.access.FieldFinder;
 import bs.commons.objects.manipulation.ObjectCloner;
 import bs.commons.unitvars.core.UnitData.Unit;
 import bs.commons.unitvars.core.UnitValue;
+import bs.commons.unitvars.exceptions.UnitException;
+import bs.commons.unitvars.units.NoUnit;
 
 public class InitialValue<T>
 {
 
 	private T value;
-	private Range<Double> range;
+	private Unit unit;
+	private Double min;
+	private Double max;
 
 	@SuppressWarnings("unchecked")
 	public InitialValue(T value)
 	{
-		if (value == null)
-		{
-			range = null;
-		} else
-		{
-			Double initialRange = null;
-			if (value.getClass().equals(Double.class))
-			{
-				initialRange = (Double) value;
-				range = new Range<Double>(initialRange, null, Double.class);
-			} else
-			{
-				try
-				{
-					if (FieldFinder.containsSuper(value, UnitValue.class))
-					{
-						Unit defaultUnit = (Unit) ObjectCloner.xmlClone(((UnitValue) value).getUnit());
-						Double unitVal = (Double) ((UnitValue) value).get(defaultUnit);
-						range = new Range<Double>(unitVal, null, Double.class);
-						// try
-						// {
-						// initialVal = new InitialValue<T>(get());
-						// } catch (UnitException e)
-						// {
-						// // TODO Auto-generated catch block
-						// // initialVal = new InitialValue<T>(get());
-						// e.printStackTrace();
-						// }
-					}
-				} catch (Exception badClass)
-				{
-
-				}
-			}
-		}
-		this.value = value;
+		assignInitialValue(value);
 	}
 
-	@SuppressWarnings("unchecked")
-	public InitialValue(T value, T max)
+	private void assignInitialValue(T val)
 	{
-		Double initialRange = null;
-		if (value.getClass().equals(Double.class))
+		value = val;
+
+		if (val.getClass().getSuperclass().equals(UnitValue.class))
 		{
-			initialRange = (Double) value;
-			range = new Range<Double>(initialRange, (Double) max, Double.class);
+			unit = (Unit) ((UnitValue) val).getUnit();
+			try
+			{
+
+				Double minmax = (Double) ((UnitValue) val).get(unit);
+				min = minmax;
+				max = minmax;
+			} catch (UnitException e)
+			{
+				// TODO Auto-generated catch block
+				min = max = 0.0;
+				e.printStackTrace();
+			}
 		} else
 		{
-			range = null;
+			unit = NoUnit.NONE;
+			if (val.getClass().equals(Double.class))
+			{
+				Double doubleVal = (Double) val;
+				min = max = doubleVal;
+			}
 		}
-		this.value = value;
 	}
 
 	@SuppressWarnings("unchecked")
 	public void setRandomValues(Double min, Double max)
 	{
-		if (value.getClass().equals(Double.class))
-		{
-			range.setValues(min, max);
-		} else
-		{
-			// IO.warn("attempted to set double min and max values when value
-			// type is " + value.getClass());
-		}
+		this.min = min;
+		this.max = max;
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public void setFixedValue(Double val)
+	{
+		min = max = val;
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public void setRandomValues(Double min, Double max, Unit unit)
+	{
+		this.min = min;
+		this.max = max;
+		this.unit = unit;
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public void setFixedValue(Double val, Unit unit)
+	{
+		min = max = val;
+		this.unit = unit;
 
 	}
 
 	@SuppressWarnings("unchecked")
 	public T getValue()
 	{
-		if (value.getClass().equals(Double.class))
+		Double generatedValue = 0.0;
+		T newVal = value;
+		if (min != null && max != null)
 		{
-			if (range.getUpper() != null && range.getLower() != null)
+			generatedValue = Double.class.cast(((max - min) * Math.random()) + min);
+
+			if (value.getClass().equals(Double.class))
 			{
 
-				return (T) Double.class.cast(
-				(((Double) range.getUpper() - (Double) range.getLower()) * Math.random()) + (Double) range.getLower());
-			} else
+				newVal = (T) generatedValue;
+			} else if (!unit.equals(NoUnit.NONE))
 			{
-				return (T) range.getLower();
+				newVal = ObjectCloner.cloner.deepClone(value);
+				UnitValue unitVal = (UnitValue) newVal;
+				try
+				{
+					unitVal.set(generatedValue, unit);
+				} catch (UnitException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-		} else
-		{
-			return value;
 		}
+		return newVal;
+
 	}
 
 	@SuppressWarnings("unchecked")
 	public Double getNumberValue()
 	{
 
-		if (range.getUpper() != null && range.getLower() != null)
-		{
-
-			return Double.class.cast((Double) range.getUpper() * Math.random() + (Double) range.getLower());
-		} else
-		{
-			return range.getLower();
-		}
+		return Double.class.cast(((max - min) * Math.random()) + min);
 
 	}
 
@@ -121,8 +126,4 @@ public class InitialValue<T>
 		value = val;
 	}
 
-	public Range<Double> getRange()
-	{
-		return range;
-	}
 }

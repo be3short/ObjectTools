@@ -1,6 +1,6 @@
 package bs.commons.objects.access;
 
-import bs.commons.objects.expansions.InitialValue;
+import bs.commons.objects.expansions.Iv;
 import bs.commons.objects.manipulation.ObjectCloner;
 
 public class ProtectedValTest
@@ -10,14 +10,14 @@ public class ProtectedValTest
 	{
 
 		public Pro pro;
-		public Protected<InitialValue<Double>> proVal2;
-		public InitialValue<Double> nonVal2;
+		public Protected<Iv<Double>> proVal2;
+		public Iv<Double> nonVal2;
 
 		public Pro2(Pro pro)
 		{
 			//this.pro = pro;
-			proVal2 = new Protected<InitialValue<Double>>(new InitialValue<Double>(2.0), true);
-			nonVal2 = new InitialValue<Double>(1.0);
+			proVal2 = new Protected<Iv<Double>>(new Iv<Double>(2.0), true);
+			nonVal2 = new Iv<Double>(1.0);
 		}
 
 	}
@@ -25,13 +25,13 @@ public class ProtectedValTest
 	public static class Pro
 	{
 
-		public Protected<InitialValue<Double>> proVal;
-		public InitialValue<Double> nonVal;
+		public Protected<Iv<Double>> proVal;
+		public Iv<Double> nonVal;
 
 		public Pro()
 		{
-			proVal = new Protected<InitialValue<Double>>(new InitialValue<Double>(2.0), true);
-			nonVal = new InitialValue<Double>(1.0);
+			proVal = new Protected<Iv<Double>>(new Iv<Double>(2.0), true);
+			nonVal = new Iv<Double>(1.0);
 		}
 
 	}

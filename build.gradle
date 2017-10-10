@@ -14,5 +14,5 @@ dependencies {
     compile 'com.github.kostaskougios:cloning:1.7.9'
 	compile group: 'com.carrotsearch', name: 'java-sizeof', version: '0.0.5'
 	compile 'com.github.ronmamo:reflections:-SNAPSHOT'
-	compile 'com.github.be3short:IOTools:v0.2.1'
+	compile 'com.github.be3short:IOTools:v0.3'
 }

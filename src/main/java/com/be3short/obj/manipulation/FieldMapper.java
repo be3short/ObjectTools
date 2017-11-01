@@ -187,6 +187,10 @@ public class FieldMapper
 		try
 
 		{
+			if (!try_file)
+			{
+				throw new Exception();
+			}
 			Object elefie = XMLParser.getObject(new File("build/.fieldmapping.xml"));
 			if (elefie != null)
 			{
@@ -240,5 +244,11 @@ public class FieldMapper
 	{
 		skipFields = getSkipFields(base_class);
 		elements = getClassFieldsMappingOfType(base_class);
+	}
+
+	public FieldMapper(Class<?> base_class, boolean try_file)
+	{
+		skipFields = getSkipFields(base_class);
+		elements = getClassFieldsMappingOfType(base_class, try_file);
 	}
 }

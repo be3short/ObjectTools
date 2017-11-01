@@ -1,7 +1,6 @@
 package com.be3short.obj.manipulation;
 
 import com.be3short.io.file.FileSystemOperator;
-import com.be3short.obj.access.FieldFinder;
 import com.be3short.obj.modification.XMLParser;
 import java.io.File;
 import java.lang.annotation.Annotation;
@@ -11,10 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.reflections.ReflectionUtils;
 import org.reflections.Reflections;
-import org.reflections.util.Utils;
 
 public class FieldMapper
 {
@@ -179,6 +175,11 @@ public class FieldMapper
 	}
 
 	public <T> HashMap<String, ArrayList<Field>> getClassFieldsMappingOfType(Class<T> class_search)
+	{
+		return getClassFieldsMappingOfType(class_search, true);
+	}
+
+	public <T> HashMap<String, ArrayList<Field>> getClassFieldsMappingOfType(Class<T> class_search, boolean try_file)
 	{
 
 		HashMap<String, ArrayList<Field>> eles = new HashMap<String, ArrayList<Field>>();

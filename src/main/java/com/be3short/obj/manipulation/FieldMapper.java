@@ -8,7 +8,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 import org.reflections.Reflections;
 
@@ -17,7 +16,8 @@ public class FieldMapper
 
 	private ArrayList<Field> skipFields;
 	public static Reflections reflections;
-	public HashMap<String, ArrayList<Field>> elements;
+	private HashMap<String, ArrayList<Field>> elements;
+	private ArrayList<Class<?>> scannedClasses;
 
 	private ArrayList<Field> getSkipFields(Class<?>... skip_classes)
 	{
@@ -58,15 +58,8 @@ public class FieldMapper
 			} else
 			{
 				getReflections();
-				HashMap<String, ArrayList<Field>> newStates = getClassFieldsMappingOfType(class_to_find);
-				for (String object : newStates.keySet())
-				{
-					if (!elements.containsKey(object))
-					{
-						elements.put(object, newStates.get(object));
-					}
-				}
-				FileSystemOperator.createOutputFile("build/.fieldmapping.xml", XMLParser.serializeObject(elements));
+				HashMap<String, ArrayList<Field>> newStates = getClassFieldsMappingOfType(class_to_find, false);
+				elements = newStates;
 				// System.out.println(XMLParser.serializeObject(elements));
 				fields = elements.get(clas);
 			}
@@ -111,7 +104,7 @@ public class FieldMapper
 		// System.out.println(XMLParser.serializeObject(elements));
 	}
 
-	public <T> HashMap<String, ArrayList<Field>> initializeClassFieldMap(Set<Class<?>> search_classes)
+	public <T> HashMap<String, ArrayList<Field>> initializeClassFieldMap(ArrayList<Class<?>> search_classes)
 	{
 		HashMap<String, ArrayList<Field>> elements = new HashMap<String, ArrayList<Field>>();
 		for (Class<?> clas : search_classes)
@@ -126,7 +119,7 @@ public class FieldMapper
 	 * Creates a mapping containing all declared fields for every state class included in the project and dependencies.
 	 * This mapping allows for values to be updated without changing pointers.
 	 */
-	public void getClassFieldMapping(HashMap<String, ArrayList<Field>> elements, Set<Class<?>> search_classes,
+	public void getClassFieldMapping(HashMap<String, ArrayList<Field>> elements, ArrayList<Class<?>> search_classes,
 	Class<?> search_class)
 	{
 
@@ -182,8 +175,6 @@ public class FieldMapper
 	public <T> HashMap<String, ArrayList<Field>> getClassFieldsMappingOfType(Class<T> class_search, boolean try_file)
 	{
 
-		HashMap<String, ArrayList<Field>> eles = new HashMap<String, ArrayList<Field>>();
-
 		try
 
 		{
@@ -194,40 +185,53 @@ public class FieldMapper
 			Object elefie = XMLParser.getObject(new File("build/.fieldmapping.xml"));
 			if (elefie != null)
 			{
-				if (elefie.getClass().equals(HashMap.class))
+				if (elefie.getClass().equals(ArrayList.class))
 				{
-					HashMap<Object, Object> map = (HashMap<Object, Object>) elefie;
-
-					for (Object classObj : map.keySet())
-					{
-						String cl = (String) classObj;
-						eles.put(cl, (ArrayList<Field>) map.get(classObj));
-					}
-					return eles;
+					ArrayList<Class<?>> map = (ArrayList<Class<?>>) elefie;
+					HashMap<String, ArrayList<Field>> mapping = getClassFieldsMapping(map);
+					return mapping;
 				}
 			}
 			throw new Exception();
 
 		} catch (Exception e)
 		{
-			getReflections();
-			Set<Class<? extends T>> classes = getPackageClassesOfType(class_search);//
+
+			scannedClasses = getClassesOfType(class_search);//
 			// getPackageClassesAnnotated(State.class);
-			HashSet<Class<?>> classSet = new HashSet<Class<?>>();
-			classSet.addAll(classes);
-			classSet.add(class_search);
-			HashMap<String, ArrayList<Field>> elems = initializeClassFieldMap(classSet);
-			getClassFieldMapping(elems, classSet, class_search);
-			while (fields(eles) < fields(elems))
-			{
-				getClassFieldMapping(elems, classSet, class_search);
-				eles = elems;
-			}
-			FileSystemOperator.createOutputFile("build/.fieldmapping.xml", XMLParser.serializeObject(elems));
+			HashMap<String, ArrayList<Field>> mapping = getClassFieldsMapping(scannedClasses);
+			FileSystemOperator.createOutputFile("build/.fieldmapping.xml", XMLParser.serializeObject(scannedClasses));
 			// System.out.println(XMLParser.serializeObject(elems));
-			return elems;
+			return mapping;
 		}
 
+	}
+
+	public HashMap<String, ArrayList<Field>> getClassFieldsMapping(ArrayList<Class<?>> class_search)
+	{
+		HashMap<String, ArrayList<Field>> eles = new HashMap<String, ArrayList<Field>>();
+		HashMap<String, ArrayList<Field>> elems = initializeClassFieldMap(class_search);
+		getClassFieldMapping(elems, class_search, class_search.get(0));
+		while (fields(eles) < fields(elems))
+		{
+			getClassFieldMapping(elems, class_search, class_search.get(0));
+			eles = elems;
+		}
+		FileSystemOperator.createOutputFile("build/.fieldmapping.xml", XMLParser.serializeObject(elems));
+		// System.out.println(XMLParser.serializeObject(elems));
+		return elems;
+	}
+
+	public <T> ArrayList<Class<?>> getClassesOfType(Class<T> class_search)
+	{
+		getReflections();
+		Set<Class<? extends T>> classes = getPackageClassesOfType(class_search);//
+		// getPackageClassesAnnotated(State.class);
+		ArrayList<Class<?>> classSet = new ArrayList<Class<?>>();
+
+		classSet.add(class_search);
+		classSet.addAll(classes);
+		return classSet;
 	}
 
 	private static Integer fields(HashMap<String, ArrayList<Field>> test)

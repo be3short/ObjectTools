@@ -10,7 +10,7 @@ import java.util.Set;
 
 import org.reflections.Reflections;
 
-import com.be3short.io.file.FileSystemOperator;
+import com.be3short.io.general.FileSystemInteractor;
 import com.be3short.obj.modification.XMLParser;
 
 public class FieldMapper
@@ -20,6 +20,7 @@ public class FieldMapper
 	public static Reflections reflections;
 	private HashMap<String, ArrayList<Field>> elements;
 	private ArrayList<Class<?>> scannedClasses;
+	private boolean noFile;
 
 	private ArrayList<Field> getSkipFields(Class<?>... skip_classes)
 	{
@@ -202,7 +203,8 @@ public class FieldMapper
 			scannedClasses = getClassesOfType(class_search);//
 			// getPackageClassesAnnotated(State.class);
 			HashMap<String, ArrayList<Field>> mapping = getClassFieldsMapping(scannedClasses);
-			FileSystemOperator.createOutputFile(".fieldmapping.xml", XMLParser.serializeObject(scannedClasses));
+			File outputFile = new File(".fieldmapping.xml");
+			FileSystemInteractor.createOutputFile(outputFile, XMLParser.serializeObject(mapping));
 			// System.out.println(XMLParser.serializeObject(elems));
 			return mapping;
 		}
@@ -219,7 +221,8 @@ public class FieldMapper
 			getClassFieldMapping(elems, class_search, class_search.get(0));
 			eles = elems;
 		}
-		FileSystemOperator.createOutputFile(".fieldmapping.xml", XMLParser.serializeObject(elems));
+		File outputFile = new File(".fieldmapping.xml");
+		FileSystemInteractor.createOutputFile(outputFile, XMLParser.serializeObject(mapping));
 		// System.out.println(XMLParser.serializeObject(elems));
 		return elems;
 	}
@@ -248,12 +251,21 @@ public class FieldMapper
 
 	public FieldMapper(Class<?> base_class)
 	{
+		noFile = false;
 		skipFields = getSkipFields(base_class);
 		elements = getClassFieldsMappingOfType(base_class);
 	}
 
+	public FieldMapper(Class<?> base_class, boolean try_file, boolean create_file)
+	{
+		noFile = create_file;
+		skipFields = getSkipFields(base_class);
+		elements = getClassFieldsMappingOfType(base_class, try_file);
+	}
+
 	public FieldMapper(Class<?> base_class, boolean try_file)
 	{
+		noFile = false;
 		skipFields = getSkipFields(base_class);
 		elements = getClassFieldsMappingOfType(base_class, try_file);
 	}

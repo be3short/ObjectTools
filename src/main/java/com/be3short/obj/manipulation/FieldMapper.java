@@ -203,9 +203,11 @@ public class FieldMapper
 			scannedClasses = getClassesOfType(class_search);//
 			// getPackageClassesAnnotated(State.class);
 			HashMap<String, ArrayList<Field>> mapping = getClassFieldsMapping(scannedClasses);
-			File outputFile = new File(".fieldmapping.xml");
-			FileSystemInteractor.createOutputFile(outputFile, XMLParser.serializeObject(mapping));
-			// System.out.println(XMLParser.serializeObject(elems));
+			if (!noFile)
+			{
+				File outputFile = new File(".fieldmapping.xml");
+				FileSystemInteractor.createOutputFile(outputFile, XMLParser.serializeObject(scannedClasses));
+			} // System.out.println(XMLParser.serializeObject(elems));
 			return mapping;
 		}
 
@@ -221,8 +223,11 @@ public class FieldMapper
 			getClassFieldMapping(elems, class_search, class_search.get(0));
 			eles = elems;
 		}
-		File outputFile = new File(".fieldmapping.xml");
-		FileSystemInteractor.createOutputFile(outputFile, XMLParser.serializeObject(elems));
+		if (!noFile)
+		{
+			File outputFile = new File(".fieldmapping.xml");
+			FileSystemInteractor.createOutputFile(outputFile, XMLParser.serializeObject(elems));
+		}
 		// System.out.println(XMLParser.serializeObject(elems));
 		return elems;
 	}

@@ -1,7 +1,11 @@
 package com.be3short.obj.utilities;
 
 import java.lang.instrument.Instrumentation;
+
+import com.be3short.io.xml.XMLParser;
 import com.be3short.obj.expansions.Range;
+import com.be3short.obj.manipulation.FieldMapper;
+import com.be3short.obj.organization.Address;
 import com.carrotsearch.sizeof.RamUsageEstimator;
 
 public class ObjectSizeFetcher
@@ -21,9 +25,25 @@ public class ObjectSizeFetcher
 
 	public static void main(String args[])
 	{
-		Double d = 214748364.0;
+		double d = 214748364.0;
 		//Long d = (long) 99999999.99999;
+		String string = "this is a string";
+		//Class<Double> dc = Double.class;
+		Class<FieldMapper> dc = FieldMapper.class;
 		Range<Double> range = new Range<Double>(2.0, 3.0, Double.class);
-		System.out.println(RamUsageEstimator.sizeOf(d) + " " + RamUsageEstimator.sizeOf(range));
+		FieldMapper fm = new FieldMapper(Address.class);
+		try
+		{
+			System.out.println(ObjectSizeCalculator.sizeOf(d) + " " + ObjectSizeCalculator.sizeOf(range) + " "
+			+ RamUsageEstimator.sizeOf(d) + " " + RamUsageEstimator.sizeOf(range));
+			System.out.println(ObjectSizeCalculator.sizeOf(fm) + " " + RamUsageEstimator.sizeOf(fm));
+			System.out.println(ObjectSizeCalculator.sizeOf(dc) + " " + RamUsageEstimator.sizeOf(dc));
+			System.out.println(ObjectSizeCalculator.sizeOf(string) + " " + RamUsageEstimator.sizeOf(string));
+			System.out.println(XMLParser.serializeObject(dc));
+		} catch (IllegalAccessException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

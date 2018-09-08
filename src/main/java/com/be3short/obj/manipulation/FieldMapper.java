@@ -1,7 +1,5 @@
 package com.be3short.obj.manipulation;
 
-import com.be3short.io.file.FileSystemOperator;
-import com.be3short.obj.modification.XMLParser;
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -9,7 +7,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
+
 import org.reflections.Reflections;
+
+import com.be3short.io.file.FileSystemOperator;
+import com.be3short.obj.modification.XMLParser;
 
 public class FieldMapper
 {
@@ -182,7 +184,7 @@ public class FieldMapper
 			{
 				throw new Exception();
 			}
-			Object elefie = XMLParser.getObject(new File("build/.fieldmapping.xml"));
+			Object elefie = XMLParser.getObject(new File(".fieldmapping.xml"));
 			if (elefie != null)
 			{
 				if (elefie.getClass().equals(ArrayList.class))
@@ -200,7 +202,7 @@ public class FieldMapper
 			scannedClasses = getClassesOfType(class_search);//
 			// getPackageClassesAnnotated(State.class);
 			HashMap<String, ArrayList<Field>> mapping = getClassFieldsMapping(scannedClasses);
-			FileSystemOperator.createOutputFile("build/.fieldmapping.xml", XMLParser.serializeObject(scannedClasses));
+			FileSystemOperator.createOutputFile(".fieldmapping.xml", XMLParser.serializeObject(scannedClasses));
 			// System.out.println(XMLParser.serializeObject(elems));
 			return mapping;
 		}
@@ -217,7 +219,7 @@ public class FieldMapper
 			getClassFieldMapping(elems, class_search, class_search.get(0));
 			eles = elems;
 		}
-		FileSystemOperator.createOutputFile("build/.fieldmapping.xml", XMLParser.serializeObject(elems));
+		FileSystemOperator.createOutputFile(".fieldmapping.xml", XMLParser.serializeObject(elems));
 		// System.out.println(XMLParser.serializeObject(elems));
 		return elems;
 	}

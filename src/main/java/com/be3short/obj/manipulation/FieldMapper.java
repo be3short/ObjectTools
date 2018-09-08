@@ -222,7 +222,7 @@ public class FieldMapper
 			eles = elems;
 		}
 		File outputFile = new File(".fieldmapping.xml");
-		FileSystemInteractor.createOutputFile(outputFile, XMLParser.serializeObject(mapping));
+		FileSystemInteractor.createOutputFile(outputFile, XMLParser.serializeObject(elems));
 		// System.out.println(XMLParser.serializeObject(elems));
 		return elems;
 	}
